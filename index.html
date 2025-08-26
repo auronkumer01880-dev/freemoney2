@@ -124,7 +124,7 @@
       <span id="circlePercent">0%</span>
     </div>
     <p><strong>🔴 Watched today:</strong> <span id="todayWatched" style="color: red;">0</span> ads</p>
-    <p><strong>🟢 Remaining today:</strong> <span id="todayRemaining" style="color: green;">100</span> ads</p>
+    <p><strong>🟢 Remaining today:</strong> <span id="todayRemaining" style="color: green;">10</span> ads</p>
     <div id="progressText">Ready to watch</div>
     <button id="watchAd" class="btn">🎬 Watch Ad</button>
   </div>
@@ -213,11 +213,11 @@
 
     // Earn page ad logic
     document.getElementById('watchAd').addEventListener('click', () => {
-      if (!window.show_9373349) return alert("Ad not available right now. Try again later.");
+      if (!window.show_9743593) return alert("Ad not available right now. Try again later.");
       if (dailyData.views >= 100) return alert("You've reached the daily limit of 100 ads.");
 
       document.getElementById("progressText").textContent = "🎬 Showing Ad...";
-      show_9373349();
+      show_9743593();
 
       let adAborted = false;
       window.addEventListener('blur', () => adAborted = true, { once: true });
