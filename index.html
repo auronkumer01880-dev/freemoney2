@@ -1,263 +1,443 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Earn & Reward App</title>
-    
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
-    
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Earn & Reward App</title>
 
-    <style>
-        body {
-            font-family: 'Nunito', sans-serif;
-            background: #f4f4f9;
-            color: #1c1c1e;
-            margin: 0;
-            padding: 0;
-        }
-        #app { max-width: 500px; margin: auto; padding-bottom: 70px; }
+  <!-- Fonts & Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"/>
 
-        /* Profile */
-        .profile-header { display: flex; align-items: center; padding: 15px; border-bottom: 1px solid #ddd; }
-        .profile-info { display: flex; align-items: center; gap: 15px; }
-        #user-photo { width: 60px; height: 60px; border-radius: 50%; border: 2px solid #007aff; }
-        .user-details h1 { font-size: 1.2rem; margin: 0; }
-        .user-details p { font-size: 0.9rem; margin: 0; color: #555; }
+  <!-- Ad SDK (keep, your zone id used below) -->
+  <script src='//libtl.com/sdk.js' data-zone='9809389' data-sdk='show_9809389' async></script>
 
-        /* Pages */
-        main { padding: 15px; }
-        .page { display: none; }
-        .page.active { display: block; }
-        h2 { margin-bottom: 15px; }
+  <style>
+    :root{--primary:#007aff;--bg:#f4f4f9;--card:#fff;--muted:#555}
+    *{box-sizing:border-box}
+    body{font-family:'Nunito',sans-serif;background:var(--bg);margin:0;color:#111}
+    #app{max-width:500px;margin:0 auto;padding-bottom:90px}
+    .profile-header{display:flex;align-items:center;gap:12px;padding:16px;border-bottom:1px solid #e6e6e6;background:var(--card)}
+    #user-photo{width:60px;height:60px;border-radius:50%;object-fit:cover;border:2px solid var(--primary)}
+    .user-details h1{margin:0;font-size:1.1rem}
+    .user-details p{margin:0;color:var(--muted);font-weight:600}
 
-        /* Stats */
-        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        .stat-card { background: #fff; border: 1px solid #ddd; border-radius: 12px; padding: 15px; text-align: center; }
-        .stat-card h3 { font-size: 0.9rem; color: #555; margin-bottom: 8px; }
-        .stat-card p { font-size: 1.4rem; font-weight: bold; color: #007aff; margin: 0; }
+    main{padding:16px}
+    .page{display:none}
+    .page.active{display:block}
+    h2{margin:0 0 12px 0}
+    .stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .stat-card{background:var(--card);border:1px solid #eee;border-radius:10px;padding:12px;text-align:center}
+    .stat-card h3{margin:0;color:var(--muted);font-size:0.9rem}
+    .stat-card p{margin:8px 0 0;font-weight:700;color:var(--primary);font-size:1.25rem}
 
-        /* Referral */
-        .referral-section { background: #fff; border: 1px solid #ddd; border-radius: 12px; padding: 15px; margin-top: 20px; text-align: center; }
-        #referral-link { width: 100%; padding: 10px; border: 1px dashed #007aff; border-radius: 8px; margin: 10px 0; text-align: center; }
-        #copy-ref-link-btn { background: #007aff; color: #fff; border: none; padding: 10px; border-radius: 8px; cursor: pointer; }
+    .referral-section{background:var(--card);border:1px dashed #e0e0e0;border-radius:10px;padding:12px;margin-top:14px;text-align:center}
+    #referral-link{width:100%;padding:10px;border-radius:8px;border:1px dashed #cfdcec;text-align:center;background:#fbfbff}
+    #copy-ref-link-btn{margin-top:8px;padding:10px;border-radius:8px;border:none;background:var(--primary);color:#fff;cursor:pointer;width:100%}
 
-        /* Tasks */
-        .task-container { background: #fff; border: 1px solid #ddd; border-radius: 12px; padding: 20px; margin-bottom: 15px; text-align: center; }
-        .task-icon { font-size: 2.5rem; color: #007aff; margin-bottom: 10px; }
-        .task-container h3 { margin: 5px 0; }
-        .task-container p { color: #555; margin: 5px 0 15px; }
-        .action-btn { width: 100%; padding: 12px; background: #007aff; color: #fff; border: none; border-radius: 8px; cursor: pointer; }
+    .task-container{background:var(--card);border:1px solid #eee;border-radius:10px;padding:18px;margin-bottom:12px;text-align:center}
+    .task-icon{font-size:2rem;color:var(--primary);margin-bottom:8px}
+    .task-container h3{margin:6px 0}
+    .task-container p{margin:6px 0 12px;color:var(--muted)}
+    .action-btn{width:100%;padding:12px;border-radius:8px;border:none;background:var(--primary);color:#fff;cursor:pointer;font-weight:700}
 
-        /* Withdraw */
-        #withdraw-form .form-group { margin-bottom: 15px; }
-        #withdraw-form label { display: block; margin-bottom: 5px; font-weight: 600; }
-        #withdraw-form input, #withdraw-form select { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px; }
+    form .form-group{margin-bottom:12px}
+    form label{display:block;margin-bottom:6px;font-weight:700}
+    form input, form select{width:100%;padding:10px;border-radius:8px;border:1px solid #e6e6e6}
 
-        /* Bottom Navigation */
-        .bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; max-width: 500px; margin: auto; display: flex; justify-content: space-around; border-top: 1px solid #ddd; background: #fff; }
-        .nav-btn { background: none; border: none; padding: 10px; font-size: 0.8rem; display: flex; flex-direction: column; align-items: center; cursor: pointer; color: #555; }
-        .nav-btn i { font-size: 1.3rem; margin-bottom: 3px; }
-        .nav-btn.active { color: #007aff; font-weight: bold; }
-    </style>
+    .bottom-nav{position:fixed;left:0;right:0;bottom:0;margin:auto;max-width:500px;display:flex;background:var(--card);border-top:1px solid #e6e6e6}
+    .nav-btn{flex:1;padding:10px;border:0;background:none;text-align:center;cursor:pointer;color:var(--muted)}
+    .nav-btn.active{color:var(--primary);font-weight:700}
+
+    .modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.35);justify-content:center;align-items:center;z-index:999}
+    .modal .box{background:var(--card);padding:20px;border-radius:10px;text-align:center}
+  </style>
 </head>
 <body>
-    <div id="app">
-        <!-- Profile -->
-        <header class="profile-header">
-            <div class="profile-info">
-                <img id="user-photo" src="" alt="User Photo">
-                <div class="user-details">
-                    <h1 id="user-name">Loading...</h1>
-                    <p>Balance: ৳<span id="user-points">0</span></p>
-                </div>
-            </div>
-        </header>
+  <div id="app">
+    <header class="profile-header">
+      <img id="user-photo" src="https://i.imgur.com/placeholder.png" alt="User photo"/>
+      <div class="user-details">
+        <h1 id="user-name">Guest</h1>
+        <p>Balance: ৳<span id="user-points">0</span></p>
+      </div>
+    </header>
 
-        <main>
-            <!-- Home -->
-            <div id="home-page" class="page active">
-                <h2>Dashboard</h2>
-                <div class="stats-grid">
-                    <div class="stat-card"><h3>Daily Ads Watched</h3><p><span id="daily-ads-watched">0</span>/25</p></div>
-                    <div class="stat-card"><h3>Total Referrals</h3><p id="referral-count">0</p></div>
-                </div>
-                <div class="referral-section">
-                    <h3>Refer & Earn</h3>
-                    <p>Invite friends to earn bonus points.</p>
-                    <input type="text" id="referral-link" readonly>
-                    <button id="copy-ref-link-btn">Copy Referral Link</button>
-                </div>
-            </div>
+    <main>
+      <!-- HOME -->
+      <section id="home-page" class="page active">
+        <h2>ড্যাশবোর্ড</h2>
+        <div class="stats-grid">
+          <div class="stat-card"><h3>Daily Ads Watched</h3><p><span id="ads-watched">0</span>/25</p></div>
+          <div class="stat-card"><h3>Total Referrals</h3><p id="referrals">0</p></div>
+        </div>
 
-            <!-- Tasks -->
-            <div id="tasks-page" class="page">
-                <h2>Complete Tasks</h2>
-                <div class="task-container">
-                    <i class="fas fa-video task-icon"></i>
-                    <h3>Watch Ads</h3>
-                    <p>Earn ৳5 for each ad.</p>
-                    <button id="watch-ad-btn" class="action-btn">Watch Ad</button>
-                </div>
-                <div class="task-container">
-                    <i class="fab fa-telegram task-icon"></i>
-                    <h3>Join Telegram Channel</h3>
-                    <p>Earn ৳20 bonus.</p>
-                    <button id="join-channel-btn" class="action-btn">Join & Claim Bonus</button>
-                </div>
-                <div class="task-container">
-                    <i class="fab fa-youtube task-icon"></i>
-                    <h3>Subscribe YouTube</h3>
-                    <p>Earn ৳30 bonus.</p>
-                    <button id="join-youtube-btn" class="action-btn">Subscribe & Claim Bonus</button>
-                </div>
-            </div>
+        <div class="referral-section">
+          <h3>Refer & Earn</h3>
+          <p>Share your referral link — invite friends to increase referrals.</p>
+          <input id="referral-link" readonly>
+          <button id="copy-ref-link-btn">Copy Referral Link</button>
+        </div>
+      </section>
 
-            <!-- Withdraw -->
-            <div id="withdraw-page" class="page">
-                <h2>Withdraw</h2>
-                <p>Minimum 5 TK required to withdraw.</p>
-                <form id="withdraw-form">
-                    <div class="form-group">
-                        <label for="withdraw-method">Method:</label>
-                        <select id="withdraw-method" required>
-                            <option value="Bkash">Bkash</option>
-                            <option value="Nagad">Nagad</option>
-                            <option value="Binance">Binance</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="account-number">Account Number/ID:</label>
-                        <input type="text" id="account-number" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="amount">Amount:</label>
-                        <input type="number" id="amount" required>
-                    </div>
-                    <button type="submit" id="withdraw-submit-btn" class="action-btn">Submit Request</button>
-                </form>
-            </div>
-        </main>
+      <!-- TASKS -->
+      <section id="tasks-page" class="page">
+        <h2>Tasks</h2>
 
-        <!-- Bottom Nav -->
-        <nav class="bottom-nav">
-            <button class="nav-btn active" data-page="home-page"><i class="fas fa-home"></i><span>Home</span></button>
-            <button class="nav-btn" data-page="tasks-page"><i class="fas fa-tasks"></i><span>Tasks</span></button>
-            <button class="nav-btn" data-page="withdraw-page"><i class="fas fa-wallet"></i><span>Withdraw</span></button>
-        </nav>
-    </div>
+        <div class="task-container">
+          <i class="fas fa-video task-icon"></i>
+          <h3>Watch Ads</h3>
+          <p>Earn ৳5 per ad (daily limit 25)</p>
+          <button id="watch-ad-btn" class="action-btn">Watch Ad</button>
+        </div>
 
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <script src='//libtl.com/sdk.js' data-zone='9809389' data-sdk='show_9809389'></script>
+        <div class="task-container">
+          <i class="fab fa-telegram task-icon"></i>
+          <h3>Join Telegram Channel</h3>
+          <p>Bonus ৳20</p>
+          <button id="join-telegram-btn" class="action-btn">Join & Claim</button>
+        </div>
 
-    <script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const tg = window.Telegram.WebApp;
+        <div class="task-container">
+          <i class="fab fa-youtube task-icon"></i>
+          <h3>Subscribe YouTube</h3>
+          <p>Bonus ৳30</p>
+          <button id="join-youtube-btn" class="action-btn">Subscribe & Claim</button>
+        </div>
+      </section>
 
-        // Config
-        const BOT_TOKEN = "7372978943:AAEYtHZGT6zXDfF1YPOVW3_6EL20MzkMFEU";
-        const BOT_USERNAME = "Devil 🍅";
-        const ADMIN_CHAT_ID = "1360972796";
-        const CHANNEL_LINK = "https://t.me/moneymintofficialbot1";
-        const YOUTUBE_LINK = "https://www.youtube.com/channel/UCLiyY2BkpA3Xqvpzify4bvA";
+      <!-- WITHDRAW -->
+      <section id="withdraw-page" class="page">
+        <h2>Withdraw</h2>
+        <p>Minimum <strong>50 TK</strong> and at least <strong>10 referrals</strong> are required to withdraw.</p>
 
-        const DAILY_AD_LIMIT = 25;
-        const POINTS_PER_AD = 5;
-        const CHANNEL_BONUS = 20;
-        const YOUTUBE_BONUS = 30;
-        const MIN_WITHDRAW_POINTS = 5;
+        <form id="withdraw-form">
+          <div class="form-group">
+            <label for="withdraw-method">Method</label>
+            <select id="withdraw-method">
+              <option>Bkash</option>
+              <option>Nagad</option>
+              <option>Binance</option>
+            </select>
+          </div>
 
-        // DOM
-        const watchAdBtn = document.getElementById('watch-ad-btn');
-        const joinChannelBtn = document.getElementById('join-channel-btn');
-        const joinYoutubeBtn = document.getElementById('join-youtube-btn');
-        const withdrawForm = document.getElementById('withdraw-form');
-        const withdrawSubmitBtn = document.getElementById('withdraw-submit-btn');
-        const referralLinkElem = document.getElementById('referral-link');
-        const copyRefLinkBtn = document.getElementById('copy-ref-link-btn');
+          <div class="form-group">
+            <label for="account-number">Account Number / ID</label>
+            <input id="account-number" type="text" required />
+          </div>
 
-        // State
-        let userState = { points: 0, dailyAdWatchCount: 0, hasJoinedChannel: false, hasJoinedYoutube: false };
+          <div class="form-group">
+            <label for="amount">Amount (TK)</label>
+            <input id="amount" type="number" required min="1" />
+          </div>
 
-        const updateUI = () => {
-            document.getElementById('user-points').textContent = userState.points;
-            document.getElementById('daily-ads-watched').textContent = userState.dailyAdWatchCount;
-            document.getElementById('referral-count').textContent = 0;
-            referralLinkElem.value = `https://t.me/${BOT_USERNAME}?start=ref_123`;
+          <button type="submit" class="action-btn">Submit Withdraw Request</button>
+        </form>
+      </section>
+    </main>
 
-            if(userState.hasJoinedChannel) { joinChannelBtn.textContent = "Bonus Claimed"; joinChannelBtn.disabled = true; }
-            if(userState.hasJoinedYoutube) { joinYoutubeBtn.textContent = "Bonus Claimed"; joinYoutubeBtn.disabled = true; }
-        };
+    <!-- bottom nav -->
+    <nav class="bottom-nav">
+      <button class="nav-btn active" data-page="home-page"><i class="fas fa-home"></i><div>Home</div></button>
+      <button class="nav-btn" data-page="tasks-page"><i class="fas fa-tasks"></i><div>Tasks</div></button>
+      <button class="nav-btn" data-page="withdraw-page"><i class="fas fa-wallet"></i><div>Withdraw</div></button>
+    </nav>
+  </div>
 
-        // Watch Ad
-        watchAdBtn.addEventListener('click', () => {
-            if(userState.dailyAdWatchCount >= DAILY_AD_LIMIT) { tg.showAlert("Daily ad limit reached."); return; }
-            show_9809389().then(() => {
-                userState.points += POINTS_PER_AD;
-                userState.dailyAdWatchCount++;
-                updateUI();
-                tg.showAlert(`You earned ৳${POINTS_PER_AD}`);
-            });
-        });
+  <!-- simple modal for loading -->
+  <div id="loading-modal" class="modal">
+    <div class="box"><div style="margin-bottom:12px"><svg width="36" height="36" viewBox="0 0 50 50"><circle cx="25" cy="25" r="20" stroke="#e6e6e6" stroke-width="5" fill="none"/><path d="M45 25a20 20 0 0 0-20-20" stroke="#007aff" stroke-width="5" fill="none"/></svg></div><div>Loading...</div></div>
+  </div>
 
-        // Join Telegram
-        joinChannelBtn.addEventListener('click', () => {
-            if(userState.hasJoinedChannel) return;
-            window.open(CHANNEL_LINK, "_blank");
-            setTimeout(() => {
-                userState.points += CHANNEL_BONUS;
-                userState.hasJoinedChannel = true;
-                updateUI();
-                tg.showAlert(`Bonus ৳${CHANNEL_BONUS} added!`);
-            }, 2000);
-        });
+  <!-- Telegram WebApp (optional) -->
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <script src='//libtl.com/sdk.js' data-zone='9809389' data-sdk='show_9809389'></script>
 
-        // Join YouTube
-        joinYoutubeBtn.addEventListener('click', () => {
-            if(userState.hasJoinedYoutube) return;
-            window.open(YOUTUBE_LINK, "_blank");
-            setTimeout(() => {
-                userState.points += YOUTUBE_BONUS;
-                userState.hasJoinedYoutube = true;
-                updateUI();
-                tg.showAlert(`Bonus ৳${YOUTUBE_BONUS} added!`);
-            }, 2000);
-        });
 
-        // Withdraw
-        withdrawForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            const amount = parseInt(document.getElementById('amount').value, 10);
-            if(isNaN(amount) || amount < MIN_WITHDRAW_POINTS) { tg.showAlert(`Minimum withdraw ৳${MIN_WITHDRAW_POINTS}`); return; }
-            if(amount > userState.points) { tg.showAlert("Insufficient balance."); return; }
+  <script>
+  (function() {
+    // ========== CONFIG - replace these ==========
+    const BOT_TOKEN = "7372978943:AAEYtHZGT6zXDfF1YPOVW3_6EL20MzkMFEU";           // e.g. "123456:ABC-DEF..."
+    const ADMIN_CHAT_ID = "1360972796";       // your admin chat id to receive withdraw messages
+    const BOT_USERNAME = " Devil 🍅"; // without @
+    const CHANNEL_LINK = "https://t.me/moneymintofficialbot1"; // Telegram channel link
+    const YOUTUBE_LINK = "https://www.youtube.com/channel/UCLiyY2BkpA3Xqvpzify4bvA"; // YouTube channel link
+    // ============================================
 
-            userState.points -= amount;
-            updateUI();
-            tg.showAlert("Withdraw request sent!");
-            withdrawForm.reset();
-        });
+    const SDK_CALL_NAME = "show_9809389"; // as included in <script> data-sdk 
 
-        // Copy Referral
-        copyRefLinkBtn.addEventListener('click', () => {
-            navigator.clipboard.writeText(referralLinkElem.value);
-            tg.showAlert("Referral link copied!");
-        });
+    // Business rules
+    const DAILY_AD_LIMIT = 25;
+    const POINTS_PER_AD = 5;
+    const TELEGRAM_BONUS = 20;
+    const YOUTUBE_BONUS = 30;
+    const MIN_WITHDRAW = 50;
+    const MIN_REFERRALS = 10;
 
-        // Navigation
-        document.querySelectorAll('.nav-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-                document.getElementById(btn.dataset.page).classList.add('active');
-                document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-            });
-        });
+    // UI elements
+    const userPhoto = document.getElementById('user-photo');
+    const userName = document.getElementById('user-name');
+    const userPointsEl = document.getElementById('user-points');
+    const adsWatchedEl = document.getElementById('ads-watched');
+    const referralsEl = document.getElementById('referrals');
+    const referralLinkInput = document.getElementById('referral-link');
+    const copyRefBtn = document.getElementById('copy-ref-link-btn');
+    const watchAdBtn = document.getElementById('watch-ad-btn');
+    const joinTelegramBtn = document.getElementById('join-telegram-btn');
+    const joinYoutubeBtn = document.getElementById('join-youtube-btn');
+    const withdrawForm = document.getElementById('withdraw-form');
+    const loadingModal = document.getElementById('loading-modal');
 
-        updateUI();
+    // Navigation
+    document.querySelectorAll('.nav-btn').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+        document.getElementById(btn.dataset.page).classList.add('active');
+        document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+        btn.classList.add('active');
+      });
     });
-    </script>
+
+    // Telegram WebApp access (if opened inside Telegram)
+    const tg = (window.Telegram && window.Telegram.WebApp) ? window.Telegram.WebApp : null;
+
+    // determine current user id (string)
+    let currentUserId = 'guest';
+    try {
+      if (tg && tg.initDataUnsafe && tg.initDataUnsafe.user && tg.initDataUnsafe.user.id) {
+        currentUserId = String(tg.initDataUnsafe.user.id);
+        // show name/photo if available
+        const u = tg.initDataUnsafe.user;
+        userName.textContent = `${u.first_name || ''} ${u.last_name || ''}`.trim() || 'User';
+        if (u.photo_url) userPhoto.src = u.photo_url;
+      }
+    } catch(e) {
+      // ignore
+    }
+
+    // localStorage keys
+    const STATE_KEY = `era_state_${currentUserId}`;          // stores points, ads, joined flags per user
+    const REFCOUNT_KEY = `era_refcount_${currentUserId}`;   // quick refcount lookup for current user
+    // note: we also keep per-referrer keys like era_refcount_<refId>
+
+    // load a saved state for current user (if any)
+    function loadState() {
+      const raw = localStorage.getItem(STATE_KEY);
+      if (!raw) {
+        return {
+          points: 0,
+          ads: 0,
+          joinedTelegram: false,
+          joinedYoutube: false
+        };
+      }
+      try {
+        const parsed = JSON.parse(raw);
+        return Object.assign({points:0, ads:0, joinedTelegram:false, joinedYoutube:false}, parsed);
+      } catch(e) {
+        return {points:0, ads:0, joinedTelegram:false, joinedYoutube:false};
+      }
+    }
+
+    function saveState(state) {
+      localStorage.setItem(STATE_KEY, JSON.stringify(state));
+    }
+
+    // get referral count for a given user id (from localStorage) - integer
+    function getRefCountFor(userId) {
+      return parseInt(localStorage.getItem(`era_refcount_${userId}`) || "0", 10);
+    }
+    function setRefCountFor(userId, count) {
+      localStorage.setItem(`era_refcount_${userId}`, String(count));
+    }
+    // mark that this visitor has already used a referral for a given refId
+    function hasClaimedReferralFor(refId, visitorId) {
+      return !!localStorage.getItem(`era_claimed_${visitorId}_for_${refId}`);
+    }
+    function markClaimedReferralFor(refId, visitorId) {
+      localStorage.setItem(`era_claimed_${visitorId}_for_${refId}`, "1");
+    }
+
+    // If page opened with ?start=ref_<id> OR Telegram start_param contains that, then
+    // increment the referrer's count (demo-only—localStorage-based).
+    function processStartParam() {
+      try {
+        // first check url param
+        const urlParams = new URLSearchParams(window.location.search);
+        let start = urlParams.get('start') || null;
+
+        // fallback: Telegram WebApp may provide start_param in initDataUnsafe
+        if (!start && tg && tg.initDataUnsafe && tg.initDataUnsafe.start_param) {
+          start = tg.initDataUnsafe.start_param;
+        }
+        if (!start) return;
+
+        const m = start.match(/^ref_(\d+)$/);
+        if (!m) return;
+        const refId = m[1];
+        // don't let visitor count themselves, and only once per visitor-per-referrer
+        if (refId && refId !== currentUserId && !hasClaimedReferralFor(refId, currentUserId)) {
+          const before = getRefCountFor(refId);
+          setRefCountFor(refId, before + 1);
+          markClaimedReferralFor(refId, currentUserId);
+          // if the referrer is the current user (unlikely because we check refId != currentUserId),
+          // they would see increment when they reload.
+          // Optionally show a tiny notice to visitor:
+          setTimeout(()=> {
+            try { if (tg) tg.showAlert("Thanks — the referral was recorded!"); else alert("Thanks — referral recorded!"); } catch(e){}
+          }, 800);
+        }
+      } catch(e){}
+    }
+
+    // safely call ad SDK function name (returns Promise)
+    function showAdPromise() {
+      return new Promise((resolve, reject) => {
+        try {
+          const fn = window[SDK_CALL_NAME];
+          if (typeof fn === 'function') {
+            // many SDKs return a promise
+            const res = fn();
+            if (res && typeof res.then === 'function') {
+              res.then(resolve).catch(reject);
+            } else {
+              // not a promise — treat as success
+              resolve(res);
+            }
+          } else {
+            reject(new Error('Ad SDK not available'));
+          }
+        } catch(err) { reject(err); }
+      });
+    }
+
+    // UI & behavior
+    let state = loadState();
+    // override referrals number from stored per-user refcount
+    state.referrals = getRefCountFor(currentUserId) || 0;
+
+    function updateUI() {
+      userPointsEl.textContent = state.points;
+      adsWatchedEl.textContent = state.ads;
+      referralsEl.textContent = state.referrals;
+      // referral link
+      referralLinkInput.value = BOT_USERNAME && currentUserId !== 'guest'
+        ? `https://t.me/${BOT_USERNAME}?start=ref_${currentUserId}`
+        : `https://t.me/${BOT_USERNAME}?start=ref_${currentUserId}`;
+
+      // update task buttons text / disabled
+      if (state.joinedTelegram) { joinTelegramBtn.textContent = "Bonus Claimed"; joinTelegramBtn.disabled = true; }
+      if (state.joinedYoutube) { joinYoutubeBtn.textContent = "Bonus Claimed"; joinYoutubeBtn.disabled = true; }
+    }
+
+    // wiring
+    copyRefBtn.addEventListener('click', ()=> {
+      navigator.clipboard.writeText(referralLinkInput.value || '').then(()=> {
+        try { if (tg) tg.showAlert("Referral link copied!"); else alert("Referral link copied!"); } catch(e){}
+      }).catch(()=> {
+        try { if (tg) tg.showAlert("Copy failed"); else alert("Copy failed"); } catch(e){}
+      });
+    });
+
+    watchAdBtn.addEventListener('click', ()=>{
+      if (state.ads >= DAILY_AD_LIMIT) { try{ if(tg) tg.showAlert("Daily ad watch limit reached"); else alert("Daily ad watch limit reached"); } catch(e){}; return; }
+      // show loading
+      loadingModal.style.display = "flex";
+      showAdPromise().then(()=>{
+        // ad completed
+        state.points += POINTS_PER_AD;
+        state.ads += 1;
+        saveState(state);
+        updateUI();
+        try { if (tg) tg.showAlert(`Congratulations! You earned ৳${POINTS_PER_AD}`); else alert(`You earned ৳${POINTS_PER_AD}`); } catch(e){}
+      }).catch((err)=>{
+        try { if (tg) tg.showAlert("Ad failed to load. Try again later."); else alert("Ad failed to load."); } catch(e){}
+        console.warn("Ad error:", err);
+      }).finally(()=>{
+        loadingModal.style.display = "none";
+      });
+    });
+
+    joinTelegramBtn.addEventListener('click', ()=>{
+      if (state.joinedTelegram) return;
+      window.open(CHANNEL_LINK, "_blank");
+      // give bonus after short delay (can't verify subscription from client)
+      setTimeout(()=>{
+        state.points += TELEGRAM_BONUS;
+        state.joinedTelegram = true;
+        saveState(state);
+        updateUI();
+        try { if (tg) tg.showAlert(`Thanks! You received ৳${TELEGRAM_BONUS}`); else alert(`Bonus ৳${TELEGRAM_BONUS} added`); } catch(e){}
+      }, 1800);
+    });
+
+    joinYoutubeBtn.addEventListener('click', ()=>{
+      if (state.joinedYoutube) return;
+      window.open(YOUTUBE_LINK, "_blank");
+      setTimeout(()=>{
+        state.points += YOUTUBE_BONUS;
+        state.joinedYoutube = true;
+        saveState(state);
+        updateUI();
+        try { if (tg) tg.showAlert(`Thanks! You received ৳${YOUTUBE_BONUS}`); else alert(`Bonus ৳${YOUTUBE_BONUS} added`); } catch(e){}
+      }, 1800);
+    });
+
+    // Withdraw submit handler
+    withdrawForm.addEventListener('submit', async (ev) => {
+      ev.preventDefault();
+      const method = document.getElementById('withdraw-method').value.trim();
+      const accountNumber = document.getElementById('account-number').value.trim();
+      const amount = parseInt(document.getElementById('amount').value, 10);
+
+      if (isNaN(amount) || amount <= 0) { try{ if(tg) tg.showAlert("Enter a valid amount"); else alert("Enter a valid amount"); }catch(e){}; return; }
+      if (amount < MIN_WITHDRAW) { try{ if(tg) tg.showAlert(`Minimum withdraw is ৳${MIN_WITHDRAW}`); else alert(`Minimum withdraw is ৳${MIN_WITHDRAW}`); }catch(e){}; return; }
+      // referral requirement
+      // refresh referral count from storage (in case changed by start param)
+      state.referrals = getRefCountFor(currentUserId) || state.referrals || 0;
+      if (state.referrals < MIN_REFERRALS) { try{ if(tg) tg.showAlert(`You need at least ${MIN_REFERRALS} referrals to withdraw`); else alert(`You need at least ${MIN_REFERRALS} referrals to withdraw`); }catch(e){}; return; }
+      if (amount > state.points) { try{ if(tg) tg.showAlert("Insufficient balance"); else alert("Insufficient balance"); }catch(e){}; return; }
+
+      // All checks passed -> deduct & send admin message (if configured)
+      state.points -= amount;
+      saveState(state);
+      updateUI();
+
+      // send message to admin via Telegram Bot API (optional)
+      // NOTE: if BOT_TOKEN or ADMIN_CHAT_ID are empty, skip the request.
+      if (BOT_TOKEN && ADMIN_CHAT_ID) {
+        const user = (tg && tg.initDataUnsafe && tg.initDataUnsafe.user) ? tg.initDataUnsafe.user : {first_name:'Unknown', last_name:'', username:'N/A', id:'N/A'};
+        const message = `<b>New Withdraw Request</b>\nUser: ${user.first_name || ''} ${user.last_name || ''} (@${user.username || 'N/A'})\nUser ID: <code>${user.id || 'N/A'}</code>\nMethod: ${method}\nAccount: <code>${accountNumber}</code>\nAmount: ${amount}\nReferrals: ${state.referrals}\nDate: ${new Date().toLocaleString('en-US', { timeZone: 'Asia/Dhaka' })}`;
+        try {
+          await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+            method: 'POST',
+            headers: {'Content-Type':'application/json'},
+            body: JSON.stringify({ chat_id: ADMIN_CHAT_ID, text: message, parse_mode: 'HTML' })
+          });
+        } catch (err) {
+          // network/CORS might block — that's okay; we already deducted locally.
+          console.warn("Failed to send admin message:", err);
+        }
+      }
+
+      try { if (tg) tg.showAlert("Withdraw request submitted!"); else alert("Withdraw request submitted!"); } catch(e){}
+      withdrawForm.reset();
+    });
+
+    // helper: if start param present, process referral
+    processStartParam();
+
+    // refresh state.referrals from storage (in case processStartParam incremented it)
+    state.referrals = getRefCountFor(currentUserId) || state.referrals || 0;
+
+    // persist state initially
+    saveState(state);
+    updateUI();
+
+    // expose for debug (optional)
+    window.__era_state = { getState: ()=>state, saveState: ()=>saveState(state) };
+
+  })();
+  </script>
 </body>
 </html>
