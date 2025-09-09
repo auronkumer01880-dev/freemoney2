@@ -195,21 +195,21 @@
                 <div class="task-container">
                     <i class="fab fa-telegram task-icon"></i>
                     <h3>Join Our Channel</h3>
-                    <p>Get ৳30 bonus.</p>
+                    <p>Get ৳20 bonus.</p>
                     <button id="join-channel-btn" class="action-btn">Join & Claim Bonus</button>
                 </div>
                 <div class="task-container">
                     <i class="fas fa-users task-icon"></i>
-                    <h3>Join Our Group</h3>
+                    <h3>Join Our Youtube</h3>
                     <p>Get ৳30 bonus.</p>
-                    <button id="join-group-btn" class="action-btn">Join & Claim Bonus</button>
+                    <button id="join-youtube-btn" class="action-btn">Join & Claim Bonus</button>
                 </div>
             </div>
             
             <!-- Withdraw Page -->
             <div id="withdraw-page" class="page">
                 <h2>Withdraw</h2>
-                <p>Minimum 500 TK required to withdraw.</p>
+                <p>Minimum 5 TK required to withdraw.</p>
                 <form id="withdraw-form">
                     <div class="form-group">
                         <label for="withdraw-method">Method:</label>
@@ -256,13 +256,13 @@
 
             // --- Configuration ---
             const BOT_TOKEN = "7372978943:AAEYtHZGT6zXDfF1YPOVW3_6EL20MzkMFEU";
-            const BOT_USERNAME = "Devil 🍅"; // Your bot's username
+            const BOT_USERNAME = " Devil 🍅"; // Your bot's username
             const ADMIN_CHAT_ID = "1360972796";
             const CHANNEL_LINK = "https://t.me/moneymintofficialbot1";
-            const YOUTUBE_LINK = "https://www.youtube.com/channel/UCLiyY2BkpA3Xqvpzify4bvA";
+            const TOUTUBE_LINK = "https://www.youtube.com/channel/UCLiyY2BkpA3Xqvpzify4bvA";
             const DAILY_AD_LIMIT = 25;
             const POINTS_PER_AD = 5;
-            const CHANNEL_JOIN_BONUS = 30;
+            const CHANNEL_JOIN_BONUS = 20;
             const YOUTUBE_JOIN_BONUS = 30;
             const MIN_WITHDRAW_POINTS = 5;
 
@@ -274,7 +274,7 @@
             const referralCountElem = document.getElementById('referral-count');
             const watchAdBtn = document.getElementById('watch-ad-btn');
             const joinChannelBtn = document.getElementById('join-channel-btn');
-            const joinYoutubeBtn = document.getElementById('join-group-btn');
+            const joinYYoutubeBtn = document.getElementById('join-group-btn');
             const withdrawForm = document.getElementById('withdraw-form');
             const withdrawSubmitBtn = document.getElementById('withdraw-submit-btn');
             const referralLinkElem = document.getElementById('referral-link');
@@ -288,7 +288,7 @@
                 lastAdWatchDate: null,
                 referrals: [],
                 hasJoinedChannel: false,
-                hasJoinedYoutube: false, // New state for group join
+                hasJoinedYoutube: false, // New state for youtube join
                 userId: null
             };
 
@@ -400,7 +400,7 @@
             };
 
             const handleJoinYoutube = () => {
-                if(userState.hasJoinedYoutube) {
+                if(userState.hasJoinedGroup) {
                     tg.showAlert('You have already claimed this bonus.'); return;
                 }
                 tg.openYoutubeLink(YOUTUBE_LINK);
@@ -417,7 +417,7 @@
     e.preventDefault();
     const method = document.getElementById('withdraw-method').value;
     const accountNumber = document.getElementById('account-number').value;
-    const amount = parseInt(document.getElementById('amount').value, 5);
+    const amount = parseInt(document.getElementById('amount').value, 10);
 
     // ✅ New condition: must have 1 referrals
     if (userState.referrals.length < 1) {
@@ -472,7 +472,6 @@
         withdrawSubmitBtn.disabled = false;
     }
 };
-
             
             const copyReferralLink = () => {
                 navigator.clipboard.writeText(referralLinkElem.value).then(() => {
